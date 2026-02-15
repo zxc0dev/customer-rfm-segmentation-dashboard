@@ -30,7 +30,7 @@ def generate_metadata(df: pd.DataFrame, csv_path: str, description: str = "") ->
     for col in df.columns:
         metadata["columns"][col] = {
             "dtype": str(df[col].dtype),
-            "missing_values": int(df[col].isna().sum()), # Useful quality metric
+            "missing_values": int(df[col].isna().sum()),
             "sample_values": df[col].dropna().unique()[:5].tolist()
         }
 
