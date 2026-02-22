@@ -3,7 +3,7 @@ import re
 from sqlalchemy import text
 from sqlalchemy.engine import URL
 
-def feature_engineering_sql(engine: URL, table_name: str, table_name_rfm: str) -> str:
+def feature_engineering_sql(engine: URL, table_name: str, table_name_rfm: str):
     feature_engineering_query = f"""
     WITH cleaned AS (
     SELECT 
@@ -43,29 +43,43 @@ def feature_engineering_sql(engine: URL, table_name: str, table_name_rfm: str) -
     
 
 def feature_engineering_pandas(df: pd.DataFrame) -> pd.DataFrame:
-    df["recency_score"] = pd.qcut(
-        df["recency"], 
+    max_date = df['invoice_date'].max()
+
+    df_rfm = df.groupby('customer_id').agg({
+        'invoice_date': lambda x: (max_date - x.max()).days,
+        'invoice': 'nunique',
+        'revenue': 'sum'
+    }).reset_index()
+
+    df_rfm.rename(columns={
+        'invoice_date': 'recency',
+        'invoice': 'frequency',
+        'revenue': 'monetary'
+    }, inplace=True)
+
+    df_rfm["recency_score"] = pd.qcut(
+        df_rfm["recency"], 
         5, 
         labels=[5,4,3,2,1]
     )
 
-    df["frequency_score"] = pd.qcut(
-        df["frequency"].rank(method="first"), 
+    df_rfm["frequency_score"] = pd.qcut(
+        df_rfm["frequency"].rank(method="first"), 
         5, 
         labels=[1,2,3,4,5]
     )
 
-    df["monetary_score"] = pd.qcut(
-        df["monetary"], 
+    df_rfm["monetary_score"] = pd.qcut(
+        df_rfm["monetary"], 
         5, 
         labels=[1,2,3,4,5]
     )
 
-    df["recency_score"] = df["recency_score"].astype(int)
-    df["frequency_score"] = df["frequency_score"].astype(int)
-    df["monetary_score"] = df["monetary_score"].astype(int)
+    df_rfm["recency_score"] = df_rfm["recency_score"].astype(int)
+    df_rfm["frequency_score"] = df_rfm["frequency_score"].astype(int)
+    df_rfm["monetary_score"] = df_rfm["monetary_score"].astype(int)
 
-    df["R_F_Score"] = df["recency_score"].astype(str) + df["frequency_score"].astype(str)
+    df_rfm["R_F_Score"] = df_rfm["recency_score"].astype(str) + df_rfm["frequency_score"].astype(str)
 
     seg_map = {
         r'[1-2][1-2]': 'hibernating',
@@ -80,6 +94,25 @@ def feature_engineering_pandas(df: pd.DataFrame) -> pd.DataFrame:
         r'5[4-5]': 'champions'
     }
 
-    df["segment"] = df["R_F_Score"].replace(seg_map, regex = True)
+    df_rfm["segment"] = df_rfm["R_F_Score"].replace(seg_map, regex = True)
 
-    return df
+    df['sales_only'] = df['revenue'].clip(lower=0)
+    df['returns_only'] = df['revenue'].clip(upper=0).abs()
+
+    ratios = df.groupby('customer_id').agg(
+        total_sales=('sales_only', 'sum'),
+        total_returns=('returns_only', 'sum')
+    )
+
+    ratios['return_ratio'] = ratios['total_returns'] / ratios['total_sales']
+    ratios['return_ratio'] = ratios['return_ratio'].fillna(0)
+    ratios.reset_index()
+    ratios
+    df_rfm = df_rfm.set_index('customer_id')
+    df_rfm = df_rfm.merge(ratios[['return_ratio']], left_index=True, right_index=True, how='left')
+
+    #avg_interpurchase_time
+    #customer_age_days
+    #avg_order_value
+    
+    return df_rfm
