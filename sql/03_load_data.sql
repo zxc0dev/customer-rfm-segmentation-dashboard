@@ -1,2 +1,3 @@
-COPY public.retail_records(invoice, stockcode, description, quantity, invoicedate, price, customer_id, country)
-    FROM STDIN WITH (FORMAT CSV, HEADER, DELIMITER ',');
+COPY public.{table_name}(invoice,stock_code,description,quantity,invoice_date,price,customer_id,country,revenue,year,month)
+FROM STDIN WITH (FORMAT CSV, HEADER, DELIMITER ',');
+    

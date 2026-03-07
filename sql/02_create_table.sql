@@ -1,10 +1,13 @@
-CREATE TABLE IF NOT EXISTS public.retail_records (
+    CREATE TABLE IF NOT EXISTS public.{table_name} (
         invoice      varchar(50) NOT NULL,
-        stockcode    varchar(50),
+        stock_code    varchar(50),
         description  text,
         quantity     integer,
-        invoicedate  timestamp without time zone,
+        invoice_date  timestamp without time zone,
         price        numeric(10,2),
         customer_id  integer,
-        country      varchar(100)
+        country      varchar(100),
+        revenue      numeric(20,2),
+        year         integer,
+        month        integer
     );
