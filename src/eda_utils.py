@@ -63,18 +63,18 @@ def download_data(dataset_path: str, force: bool = False):
 
 _VALID_KINDS = {"hist", "count", "bar", "box", "violin", "swarm"}
 _DEFAULT_PALETTE = "deep"
-
 _Y_GRID_ONLY = {"hist", "bar", "count"}
+
+TEXT_COLOR = "#2B2D42"
 
 
 def _polish_ax(ax, xtick_rotation: int) -> None:
-    """Per-axis polish that rcParams cannot handle."""
 
-    # ── rotated tick alignment ────────────────────────────────────────────
     if xtick_rotation != 0:
         for label in ax.get_xticklabels():
             label.set_rotation(xtick_rotation)
-            label.set_ha("right")           # anchors label end under tick
+            label.set_ha("right")
+
 
 def plots(
     data,
@@ -90,6 +90,7 @@ def plots(
     cols: int = 3,
     figsize_per_row: tuple = (18, 5),
     xtick_rotation: int = 45,
+    bar_fmt: str = "%.2f",
 ):
     """
     Plot multiple seaborn charts for a list of features.
@@ -118,6 +119,9 @@ def plots(
     figsize_per_row : (width, height)
     xtick_rotation : int
         X-axis tick label rotation; 45 recommended for long category names.
+    bar_fmt : str
+        Format string for bar plot labels.
+        Examples: "%.0f", "%.2f" (default), "%,.0f" (thousands).
 
     Returns
     -------
@@ -165,6 +169,9 @@ def plots(
                 hue=hue, kde=kde,
                 palette=_pal if hue else None,
                 color=_color0 if not hue else None,
+                edgecolor="white",
+                linewidth=0.6,
+                alpha=0.9,
                 ax=ax,
             )
 
@@ -174,10 +181,16 @@ def plots(
                 hue=hue,
                 palette=_pal if hue else None,
                 color=_color0 if not hue else None,
+                edgecolor="white",
+                linewidth=0.6,
+                alpha=0.9,
                 ax=ax,
             )
             for container in ax.containers:
-                ax.bar_label(container, fmt="%d", padding=3)
+                ax.bar_label(
+                    container, fmt="%d", padding=4,
+                    fontsize=10, color=TEXT_COLOR,
+                )
 
         elif kind == "bar":
             sns.barplot(
@@ -185,24 +198,41 @@ def plots(
                 hue=hue,
                 palette=_pal if hue else None,
                 color=_color0 if not hue else None,
+                edgecolor="white",
+                linewidth=0.6,
+                alpha=0.9,
                 ax=ax,
             )
             for container in ax.containers:
-                ax.bar_label(container, fmt="%.2f", padding=3)
+                ax.bar_label(
+                    container, fmt=bar_fmt, padding=4,
+                    fontsize=10, color=TEXT_COLOR,
+                )
 
         elif kind == "box":
-            sns.boxplot(**grouped_kw, showfliers=showfliers)
+            sns.boxplot(
+                **grouped_kw,
+                showfliers=showfliers,
+                linewidth=1.2,
+                flierprops=dict(
+                    marker="o", markersize=4,
+                    alpha=0.5, linestyle="none",
+                ),
+            )
 
         elif kind == "violin":
-            sns.violinplot(**grouped_kw)
+            sns.violinplot(
+                **grouped_kw,
+                linewidth=1.2,
+                inner="quartile",
+            )
 
         elif kind == "swarm":
-            sns.swarmplot(**grouped_kw, dodge=hue is not None)
+            sns.swarmplot(**grouped_kw, dodge=hue is not None, size=4, alpha=0.8)
 
         ax.set_title(feature)
         ax.set_xlabel("")
 
-        # ── grid: y-only for bar-family, both axes for distribution plots ──
         if kind in _Y_GRID_ONLY:
             ax.grid(True,  axis="y")
             ax.grid(False, axis="x")
