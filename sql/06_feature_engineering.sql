@@ -1,6 +1,6 @@
-    DROP TABLE IF EXISTS public.{table_name_rfm};
+DROP TABLE IF EXISTS public.featured_retail;
 
-    CREATE TABLE public.{table_name_rfm} AS
+    CREATE TABLE public.featured_retail AS
     WITH
     /* 1) Base data (UNFILTERED except customer_id not null) */
     base AS (
@@ -11,7 +11,7 @@
             quantity,
             price,
             (quantity * price) AS revenue
-        FROM public.{table_name}
+        FROM public.base_retail
         WHERE customer_id IS NOT NULL
     ),
 

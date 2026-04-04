@@ -1,4 +1,4 @@
-    CREATE TABLE IF NOT EXISTS public.{table_name} (
+CREATE TABLE IF NOT EXISTS public.base_retail (
         invoice      varchar(50) NOT NULL,
         stock_code    varchar(50),
         description  text,
