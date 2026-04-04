@@ -43,7 +43,7 @@ DROP TABLE IF EXISTS public.featured_retail;
         CROSS JOIN global_max gm
     ),
 
-    /* 4) Scores (qcut approximation via NTILE) */
+    /* 4) Scores */
     scored AS (
         SELECT
             r.*,
