@@ -1,9 +1,10 @@
 import pandas as pd
-import re
-from sqlalchemy import text
-from sqlalchemy.engine import URL
+from src.utils.logger import get_logger
 
-def feature_engineering_pandas(df: pd.DataFrame) -> pd.DataFrame:
+logger = get_logger(__name__)
+
+def pd_feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
+    logger.info("=== PANDAS FEATURE ENGINEERING STARTED ===")
     max_date = df['invoice_date'].max()
 
     df_rfm = df.groupby('customer_id').agg({
@@ -113,4 +114,6 @@ def feature_engineering_pandas(df: pd.DataFrame) -> pd.DataFrame:
     df_rfm = df_rfm.merge(avg_order_value[["avg_order_value"]],
                         left_index=True, right_index=True, how="left")
     
+    logger.info("=== PANDAS FEATURE ENGINEERING COMPLETED SUCCESSFULLY ===")
+
     return df_rfm

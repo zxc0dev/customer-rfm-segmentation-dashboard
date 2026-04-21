@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS public.featured_retail;
+DROP TABLE IF EXISTS dim.dim_featured_retail;
 
-    CREATE TABLE public.featured_retail AS
+    CREATE TABLE dim.dim_featured_retail AS
     WITH
     /* 1) Base data (UNFILTERED except customer_id not null) */
     base AS (
@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS public.featured_retail;
             quantity,
             price,
             (quantity * price) AS revenue
-        FROM public.base_retail
+        FROM dim.dim_base_retail
         WHERE customer_id IS NOT NULL
     ),
 
