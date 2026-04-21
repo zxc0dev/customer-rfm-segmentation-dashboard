@@ -2,3 +2,6 @@
 data/
 __pycache__/
 Customer_RFM_Segmentation.egg-info/
+build/
+.env
+logs/
