@@ -1,0 +1,45 @@
+[project]
+name = "customer-rfm-segmentation"
+version = "0.0.1"
+authors = [
+    { name = "zxc0.dev" }
+]
+requires-python = ">=3.11"
+
+dependencies = [
+    "pandas>=2.0,<3",
+    "numpy>=2.0,<3",
+    "missingno>=0.5,<1",
+    "kagglehub>=1.0,<2",
+    "jupyter>=1.1,<2",
+    "ipykernel>=6.29,<7",
+    "jupysql>=0.3,<1",
+    "sqlalchemy>=2.0,<3",
+    "ipython-sql",
+    "pgspecial",
+    "psycopg2-binary>=2.9,<3",
+    "python-dotenv",
+    "prefect",
+    "dbt-postgres>=1.7,<2",
+    "matplotlib>=3.8,<4",
+    "seaborn>=0.13,<1",
+    "scikit-learn>=1.5,<2",
+    "joblib>=1.3,<2"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "ruff"
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "sql*"]
+
+[tool.setuptools.package-data]
+sql_scripts = ["**/*.sql"]
