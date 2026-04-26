@@ -72,7 +72,6 @@ def pd_feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
 
     ratios['return_ratio'] = ratios['total_returns'] / ratios['total_sales']
     ratios['return_ratio'] = ratios['return_ratio'].fillna(0)
-    ratios.reset_index(inplace=True)
     df_rfm = df_rfm.set_index('customer_id')
     df_rfm = df_rfm.merge(ratios[['return_ratio']], left_index=True, right_index=True, how='left')
 
