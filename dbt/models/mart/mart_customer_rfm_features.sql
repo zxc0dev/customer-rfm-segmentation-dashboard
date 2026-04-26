@@ -1,6 +1,7 @@
-DROP TABLE IF EXISTS dim.dim_featured_retail;
+{{
+    config(materialized='view')
+}}
 
-    CREATE TABLE dim.dim_featured_retail AS
     WITH
     /* 1) Base data (UNFILTERED except customer_id not null) */
     base AS (
@@ -11,7 +12,7 @@ DROP TABLE IF EXISTS dim.dim_featured_retail;
             quantity,
             price,
             (quantity * price) AS revenue
-        FROM dim.dim_base_retail
+        FROM {{ ref('dim_customers') }}
         WHERE customer_id IS NOT NULL
     ),
 
@@ -119,4 +120,3 @@ DROP TABLE IF EXISTS dim.dim_featured_retail;
         ON rr.customer_id = seg.customer_id
     LEFT JOIN aov a
         ON a.customer_id = seg.customer_id
-    ;

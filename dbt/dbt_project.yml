@@ -1,0 +1,31 @@
+name: "customer_rfm"
+version: "1.0.0"
+config-version: 2
+
+profile: "customer_rfm"
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+analysis-paths: ["analyses"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  customer_rfm:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    dim:
+      +materialized: table
+      +schema: dim
+    mart:
+      +materialized: view
+      +schema: mart

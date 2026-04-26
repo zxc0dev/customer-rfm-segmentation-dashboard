@@ -18,10 +18,10 @@ def _copy_csv(raw_conn, table: str, csv_path):
 def load_base():
     engine = create_engine(DB_CREATED)
     logger.info("=== LOAD STARTED ===")
-    logger.info("Loading CSVs into dim...")
+    logger.info("Loading CSVs into raw...")
     raw_conn = engine.raw_connection()
     try:
-        _copy_csv(raw_conn, "dim.dim_base_retail", PROCESSED_DIR / "base_retail.csv")
+        _copy_csv(raw_conn, "raw.raw_base_retail", PROCESSED_DIR / "base_retail.csv")
         raw_conn.commit()
         logger.info("Base loaded.")
         logger.info("=== LOAD COMPLETED SUCCESSFULLY ===")

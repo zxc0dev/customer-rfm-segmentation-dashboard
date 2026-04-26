@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: raw_base_retail
+        columns:
+          - name: invoice
+          - name: stock_code
+          - name: description
+          - name: quantity
+          - name: invoice_date
+          - name: price
+          - name: customer_id
+          - name: country
+          - name: revenue
+          - name: year
+          - name: month

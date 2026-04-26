@@ -1,7 +1,11 @@
 CREATE SCHEMA IF NOT EXISTS dim;
+CREATE SCHEMA IF NOT EXISTS stg;
+CREATE SCHEMA IF NOT EXISTS mart;
+CREATE SCHEMA IF NOT EXISTS raw;
+CREATE SCHEMA IF NOT EXISTS int;
 
 
-CREATE TABLE IF NOT EXISTS dim.dim_base_retail (
+CREATE TABLE IF NOT EXISTS raw.raw_base_retail (
         invoice      VARCHAR(50) NOT NULL,
         stock_code    VARCHAR(50),
         description  TEXT,

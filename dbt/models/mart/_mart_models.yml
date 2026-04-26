@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: mart_customer_rfm_features
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+      - name: recency
+      - name: frequency
+      - name: monetary
+      - name: recency_score
+      - name: frequency_score
+      - name: monetary_score
+      - name: r_f_score
+      - name: segment
+      - name: return_ratio
+      - name: avg_order_value

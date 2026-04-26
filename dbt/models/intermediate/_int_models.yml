@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: int_retail_cleaned
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+      - name: invoice
+        tests:
+          - not_null
+      - name: invoice_date
+        tests:
+          - not_null
+      - name: revenue
