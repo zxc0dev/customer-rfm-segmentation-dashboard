@@ -45,3 +45,7 @@ Thumbs.db
 myenv/*
 myenv*
 pyvenv.cfg
+
+customer_rfm/
+customer_rfm/*
+customer_rfm
