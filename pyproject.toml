@@ -7,34 +7,46 @@ authors = [
 requires-python = ">=3.11"
 
 dependencies = [
+    # data
     "pandas>=2.0,<3",
     "numpy>=2.0,<3",
+    # EDA / visualisation
     "missingno>=0.5,<1",
+    "matplotlib>=3.8,<4",
+    "seaborn>=0.13,<1",
+    # ML
+    "scikit-learn>=1.5,<2",
+    "joblib>=1.3,<2",
+    # data ingestion
     "kagglehub>=1.0,<2",
+    # notebooks
     "jupyter>=1.1,<2",
     "ipykernel>=6.29,<7",
     "jupysql>=0.3,<1",
-    "sqlalchemy>=2.0,<3",
     "ipython-sql",
     "pgspecial",
+    # database
+    "sqlalchemy>=2.0,<3",
     "psycopg2-binary>=2.9,<3",
-    "python-dotenv",
-    "prefect",
-    "dbt-postgres>=1.7,<2",
-    "matplotlib>=3.8,<4",
-    "seaborn>=0.13,<1",
-    "scikit-learn>=1.5,<2",
-    "joblib>=1.3,<2"
+    # config
+    "python-dotenv>=1.0,<2",
+    # orchestration
+    "prefect>=3.0,<4",
+    # dbt
+    "dbt-core>=1.8,<2",
+    "dbt-postgres>=1.8,<2",
+    "squarify",
+    "statsmodels"
 ]
 
 [project.optional-dependencies]
 dev = [
-    "black",
-    "ruff"
+    "black>=24.0,<25",
+    "ruff>=0.4,<1",
 ]
 
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
@@ -43,3 +55,10 @@ include = ["src*", "sql*"]
 
 [tool.setuptools.package-data]
 sql_scripts = ["**/*.sql"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
