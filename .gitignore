@@ -1,7 +1,47 @@
-.vscode/
-data/
-__pycache__/
-Customer_RFM_Segmentation.egg-info/
-build/
+# environment
 .env
+.venv/
+venv/
+env/
+
+# VS Code
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+pip-wheel-metadata/
+*.spec
+
+# Jupyter
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# data (large files – keep only source-controlled samples)
+data/
+
+# logs
 logs/
+*.log
+
+# dbt artefacts
+dbt/target/
+dbt/dbt_packages/
+dbt/.user.yml
+dbt/logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+myenv/*
+myenv*
+pyvenv.cfg
